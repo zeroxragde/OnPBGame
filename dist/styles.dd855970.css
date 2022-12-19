@@ -1,0 +1,13 @@
+body {
+  font-family: sans-serif;
+  background-color: red;
+}
+.tablero {
+  margin: 34px;
+  padding: 30px;
+  position: absolute;
+  top: 10px;
+}
+
+
+/*# sourceMappingURL=/styles.dd855970.css.map */
