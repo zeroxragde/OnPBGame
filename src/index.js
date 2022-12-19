@@ -2,76 +2,82 @@ class BoardGame {
   constructor(obj) {
     var defaultprop = {
       viewport: {
-        width: 800,
-        height: 800
+        width: 600,
+        height: 400,
       },
       map: {
-        width: 500,
-        height: 500,
-        size: 32
-      }
+        tiles: 15,
+        size: 32,
+      },
     };
     this.props = Object.assign(defaultprop, obj);
+    var prop = this.extend(defaultprop, obj);
+    console.log("jax", prop);
 
     if (!this.props.hasOwnProperty("id")) {
       throw new BoardGameExceptions("Falta el id del elemento del HTML...");
     } else {
       var canvas = document.createElement("canvas");
       canvas.setAttribute("id", "canvas_" + this.props.id);
-      canvas.setAttribute("width", this.props.map.width);
-      canvas.setAttribute("height", this.props.map.height);
 
-      this.renderMap(canvas);
+      var width = this.props.map.tiles * this.props.map.size;
+      var height = this.props.map.tiles * this.props.map.size;
+
+      //console.log("hjax", this.props.map.tiles);
+
+      canvas.setAttribute("width", width);
+      canvas.setAttribute("height", height);
+
       this.el = document.getElementById(this.props.id);
-
       this.el.style.width = this.props.viewport.width + "px";
       this.el.style.height = this.props.viewport.height + "px";
-      this.el.style.backgroundColor = "#00078c";
+      this.el.style.backgroundColor = "rgb(60, 0, 255)";
       this.el.style.overflow = "auto";
-
       this.el.appendChild(canvas);
+      this.renderMap(canvas);
     }
   }
   renderMap(canvas) {
     var app = this;
 
     app.canvas = new fabric.Canvas(canvas, {
-      selection: false
+      selection: false,
     });
+    var sizeGrid = (this.props.map.tiles - 1) * this.props.map.size;
+    var realzise = this.props.map.tiles;
 
-    for (
-      var i = 0;
-      i < Math.round(this.props.map.width / this.props.map.size);
-      i++
-    ) {
+    for (var i = 0; i <= realzise; i++) {
       var linea1Op = [
         Math.round(i * this.props.map.size),
         0,
         Math.round(i * this.props.map.size),
-        this.props.map.width
+        sizeGrid,
       ];
 
       var lineaH = new fabric.Line(linea1Op, {
         stroke: "#ccc",
-        selectable: false
+        selectable: false,
       });
       app.canvas.add(lineaH);
 
       var linea2p = [
         0,
         Math.round(i * this.props.map.size),
-        this.props.map.width,
-        Math.round(i * this.props.map.size)
+        sizeGrid,
+        Math.round(i * this.props.map.size),
       ];
 
       var lineaV = new fabric.Line(linea2p, {
         stroke: "#ccc",
-        selectable: false
+        selectable: false,
       });
       app.canvas.add(lineaV);
     }
   }
-
+  extend(a, b) {
+    for (var key in b) if (b.hasOwnProperty(key)) a[key] = b[key];
+    return a;
+  }
   getRandom(min, max) {
     return Math.random() * (max - min) + min;
   }
@@ -104,5 +110,8 @@ class BoardGameExceptions {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var tablero = new BoardGame({
-  id: "game"
+  id: "game",
+  map: {
+    tiles: 65,
+  },
 });
