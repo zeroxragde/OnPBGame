@@ -129,30 +129,36 @@ var BoardGame = /*#__PURE__*/function () {
     _classCallCheck(this, BoardGame);
     var defaultprop = {
       viewport: {
-        width: 800,
-        height: 800
+        width: 600,
+        height: 400
       },
       map: {
-        width: 500,
-        height: 500,
+        tiles: 15,
         size: 32
       }
     };
     this.props = Object.assign(defaultprop, obj);
+    var prop = this.extend(defaultprop, obj);
+    console.log("jax", prop);
     if (!this.props.hasOwnProperty("id")) {
       throw new BoardGameExceptions("Falta el id del elemento del HTML...");
     } else {
       var canvas = document.createElement("canvas");
       canvas.setAttribute("id", "canvas_" + this.props.id);
-      canvas.setAttribute("width", this.props.map.width);
-      canvas.setAttribute("height", this.props.map.height);
-      this.renderMap(canvas);
+      var width = this.props.map.tiles * this.props.map.size;
+      var height = this.props.map.tiles * this.props.map.size;
+
+      //console.log("hjax", this.props.map.tiles);
+
+      canvas.setAttribute("width", width);
+      canvas.setAttribute("height", height);
       this.el = document.getElementById(this.props.id);
       this.el.style.width = this.props.viewport.width + "px";
       this.el.style.height = this.props.viewport.height + "px";
-      this.el.style.backgroundColor = "#00078c";
+      this.el.style.backgroundColor = "rgb(60, 0, 255)";
       this.el.style.overflow = "auto";
       this.el.appendChild(canvas);
+      this.renderMap(canvas);
     }
   }
   _createClass(BoardGame, [{
@@ -162,20 +168,30 @@ var BoardGame = /*#__PURE__*/function () {
       app.canvas = new fabric.Canvas(canvas, {
         selection: false
       });
-      for (var i = 0; i < Math.round(this.props.map.width / this.props.map.size); i++) {
-        var linea1Op = [Math.round(i * this.props.map.size), 0, Math.round(i * this.props.map.size), this.props.map.width];
+      var sizeGrid = (this.props.map.tiles - 1) * this.props.map.size;
+      var realzise = this.props.map.tiles;
+      for (var i = 0; i <= realzise; i++) {
+        var linea1Op = [Math.round(i * this.props.map.size), 0, Math.round(i * this.props.map.size), sizeGrid];
         var lineaH = new fabric.Line(linea1Op, {
           stroke: "#ccc",
           selectable: false
         });
         app.canvas.add(lineaH);
-        var linea2p = [0, Math.round(i * this.props.map.size), this.props.map.width, Math.round(i * this.props.map.size)];
+        var linea2p = [0, Math.round(i * this.props.map.size), sizeGrid, Math.round(i * this.props.map.size)];
         var lineaV = new fabric.Line(linea2p, {
           stroke: "#ccc",
           selectable: false
         });
         app.canvas.add(lineaV);
       }
+    }
+  }, {
+    key: "extend",
+    value: function extend(a, b) {
+      for (var key in b) {
+        if (b.hasOwnProperty(key)) a[key] = b[key];
+      }
+      return a;
     }
   }, {
     key: "getRandom",
@@ -215,7 +231,10 @@ var BoardGameExceptions = /*#__PURE__*/_createClass(function BoardGameExceptions
   return error;
 }); ////////////////////////////////////////////////////////////////////////////////////////////////////
 var tablero = new BoardGame({
-  id: "game"
+  id: "game",
+  map: {
+    tiles: 65
+  }
 });
 },{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -242,7 +261,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54994" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55837" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
